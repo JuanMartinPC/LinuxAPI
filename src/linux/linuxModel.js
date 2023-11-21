@@ -2,8 +2,9 @@ const connection = require('../../db_connection');
 
 class Linux {
     static getAll = (req, res) => {
-        if (req.query.id){
-            connection.query('SELECT * FROM distribution WHERE id = ?',[req.query.id],(err, results) => {
+        const id = req.query.id;
+        if (id){
+            connection.query('SELECT * FROM distribution WHERE id = ?',[id],(err, results) => {
                 res.json(results)
             })
         } else {
@@ -13,22 +14,29 @@ class Linux {
     }
 
     static updateOne = (req, res) => {
-        connection.query("UPDATE distribution SET name = ?, ver = ?, launch_year = ?, official_website = ? WHERE id = 1",
-        ['Linux Mint', '21.2 Victoria', 2023, 'https://www.linuxmint.com'], (err, results) => {
-            res.json(results)
+        const id = req.query.id;
+        const {name, ver, launch_year, official_website} = req.body;
+        connection.query("UPDATE distribution SET name = ?, ver = ?, launch_year = ?, official_website = ? WHERE id = ?",
+        [name, ver, launch_year, official_website, id], (err, results) => {
+            if (err) return res.json({'mensaje': err})
+            res.json({'mensaje': 'Distribución actualizada.'})
         })
     }
 
     static addOne = (req, res) => {
-        connection.query("INSERT INTO distribution (name, ver, launch_year, official_website) VALUES ('Ubuntu', '4.10', 2004, 'https://www.ubuntu.com')",
+        const {name, ver, launch_year, official_website} = req.body;
+        connection.query("INSERT INTO distribution (name, ver, launch_year, official_website) VALUES (?, ?, ?, ?)", [name, ver, launch_year, official_website],
         (err, results) => {
-            res.json(results)
+            if (err) return res.json({'mensaje': err})
+            res.json({'mensaje': 'Distribución agregada.'})
         })
     }
 
     static deleteOne = (req, res) => {
-        connection.query('DELETE FROM distribution WHERE id = 16', (err, results) => {
-            res.json(results)
+        const id = req.query.id;
+        connection.query('DELETE FROM distribution WHERE id = ?',[id], (err, results) => {
+            if (err) return res.json({'mensaje': err})
+            res.json({'mensaje': 'Distribución eliminada.'})
         })
     }
 }
