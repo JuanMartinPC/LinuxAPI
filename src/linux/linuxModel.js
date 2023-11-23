@@ -4,28 +4,28 @@ class Linux {
     static getAll = (req, res) => {
         const id = req.query.id;
         if (id){
-            connection.query('SELECT * FROM distribution WHERE id = ?',[id],(err, results) => {
+            connection.query('SELECT * FROM distributions WHERE id = ?',[id],(err, results) => {
                 res.json(results)
             })
         } else {
-        connection.query('SELECT * FROM distribution', (err, results) => {
+        connection.query('SELECT * FROM distributions', (err, results) => {
             res.json(results)
         })}
     }
 
     static updateOne = (req, res) => {
         const id = req.query.id;
-        const {name, ver, launch_year, official_website} = req.body;
-        connection.query("UPDATE distribution SET name = ?, ver = ?, launch_year = ?, official_website = ? WHERE id = ?",
-        [name, ver, launch_year, official_website, id], (err, results) => {
+        const {name, ver, launch_year, website, info, image} = req.body;
+        connection.query("UPDATE distributions SET name = ?, ver = ?, launch_year = ?, website = ?, info = ?, image = ? WHERE id = ?",
+        [name, ver, launch_year, website, info, image, id], (err, results) => {
             if (err) return res.json({'mensaje': err})
             res.json({'mensaje': 'Distribución actualizada.'})
         })
     }
 
     static addOne = (req, res) => {
-        const {name, ver, launch_year, official_website} = req.body;
-        connection.query("INSERT INTO distribution (name, ver, launch_year, official_website) VALUES (?, ?, ?, ?)", [name, ver, launch_year, official_website],
+        const {name, ver, launch_year, website, info, image} = req.body;
+        connection.query("INSERT INTO distributions (name, ver, launch_year, website, info, image) VALUES (?, ?, ?, ?, ?, ?)", [name, ver, launch_year, website, info, image],
         (err, results) => {
             if (err) return res.json({'mensaje': err})
             res.json({'mensaje': 'Distribución agregada.'})
@@ -34,7 +34,7 @@ class Linux {
 
     static deleteOne = (req, res) => {
         const id = req.query.id;
-        connection.query('DELETE FROM distribution WHERE id = ?',[id], (err, results) => {
+        connection.query('DELETE FROM distributions WHERE id = ?',[id], (err, results) => {
             if (err) return res.json({'mensaje': err})
             res.json({'mensaje': 'Distribución eliminada.'})
         })
