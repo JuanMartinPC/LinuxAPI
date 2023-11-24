@@ -2,6 +2,7 @@ const connection = require('../../db_connection');
 
 class Linux {
     static getAll = (req, res) => {
+        res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
         const id = req.query.id;
         if (id){
             connection.query('SELECT * FROM distributions WHERE id = ?',[id],(err, results) => {
