@@ -1,7 +1,6 @@
 import React from "react";
 import "../style/NavBar.css";
 import penguinPet from "../img/linux_penguin.png";
-import { Link } from 'react-router-dom';
 
 
 function NavBar() {
@@ -35,11 +34,9 @@ function NavBar() {
             </a>
           </li>
         </ul>
-        <Link to="/login">
           <div className="icon-container">
                 <i className="fa-solid fa-user"></i> 
           </div>
-        </Link>
       </nav>
     </div>
   );
