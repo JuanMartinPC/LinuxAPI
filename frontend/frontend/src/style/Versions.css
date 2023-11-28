@@ -1,0 +1,25 @@
+.versions {
+    margin-top: 200px;
+    border: solid white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #02152B;
+    box-shadow: 0 3px 13px 1px white;
+    width: 900px;
+    height: 800px;
+}
+
+.card {
+    width: 400px;
+}
+
+.card-container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+button {
+    width: 100px;
+}
