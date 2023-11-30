@@ -1,13 +1,15 @@
 const connection = require('../../db_connection');
-const { hash, compare } = require('bcrypt')
+const { hash, compare } = require('bcrypt');
+const { tokenSign } = require('../utils/handleJWT');
 
 class Users {    
     static addOne = async(req, res) => {
+        res.header("Access-Control-Allow-Origin", "http://localhost:5173/login")
         const {username, email, pass} = req.body;
         const safePass = await hash(pass, 10);
-        connection.query('INSERT INTO users (username, email, pass) VALUES (?, ?, ?)', [username, email, safePass], (err, results) => {
+        await connection.promise().query('INSERT INTO users (username, email, pass) VALUES (?, ?, ?)', [username, email, safePass], (err, results) => {
             if (err) return res.json({'mensaje': err})
-            res.json({'mensaje': 'Usuario agregado.'})
+            res.send({username, email, pass})
     })
     }
 
@@ -21,7 +23,14 @@ class Users {
                 if (!results) return res.status(401).json({'mensaje': 'Email o contraseña incorrectas.'})
                 else {
                     console.log(results);
-                    return res.status(200).json({'mensaje': 'Usuario autorizado.'})
+
+                    //JWT
+                    const tokenPayload = {
+                        email: email,
+                        pass: pass
+                    }                
+                    const jwt = tokenSign(tokenPayload, 60 * 60 * 24)
+                    return (res.status(200).json({'mensaje': 'Usuario autorizado.', 'token': jwt}))
                 }
             })            
         })
@@ -29,6 +38,7 @@ class Users {
 
     // Metodos para admins
     static getAll = (req, res) => {
+        res.header("Access-Control-Allow-Origin", "http://localhost:5173")
         const id = req.query.id;
         if (id){
             connection.query('SELECT * FROM users WHERE id = ?',[id],(err, results) => {                
