@@ -4,9 +4,9 @@ const Linux = require('./linuxModel');
 const isAuth = require('../middlewares/Auth')
 
 router.get('/', Linux.getAll)
-router.put('/update', Linux.updateOne)
-router.post('/add', Linux.addOne)
-router.delete('/delete', Linux.deleteOne)
+router.put('/update', isAuth, Linux.updateOne)
+router.post('/add', isAuth, Linux.addOne)
+router.delete('/delete', isAuth, Linux.deleteOne)
 
 
 module.exports = router;
